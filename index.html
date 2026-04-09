@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+          content="Tempo: Small Vision-Language Models are Smart Compressors for Long Video Understanding. A highly efficient framework achieving state-of-the-art performance on LVBench and Video-MME using intent-driven token sparsity.">
+  <meta name="keywords" content="Tempo, Long Video Understanding, Vision-Language Models, VLM, MLLM, Token Compression, Video-MME, LVBench, Meta AI, KAUST">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tempo: Smart Compressors for Long Video Understanding</title>
+
+  <meta property="og:title" content="Tempo: Small Vision-Language Models are Smart Compressors for Long Video Understanding" />
+  <meta property="og:description" content="Tempo achieves state-of-the-art long video understanding with a compact 6B model through intent-driven token sparsity." />
+  <meta property="og:image" content="https://feielysia.github.io/tempo-page/static/images/preview.jpg" />
+  <meta property="og:url" content="https://feielysia.github.io/tempo-page/" />
+  
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tempo: Smart Compressors for Long Video Understanding" />
+  <meta name="twitter:description" content="Tempo achieves state-of-the-art performance on LVBench with only a 6B model." />
+  <meta name="twitter:image" content="https://feielysia.github.io/tempo-page/static/images/preview.jpg" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBQK8NB3NF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZBQK8NB3NF');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://feielysia.github.io/">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://github.com/FeiElysia/ViECap">
+            ViECap
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Small Vision-Language Models are Smart Compressors for Long Video Understanding</h1>
+          <style>
+            .publication-authors a { color: #363636 !important; transition: color 0.2s; }
+            .publication-authors a:hover { color: #0f62fe !important; text-decoration: underline; } 
+            
+            .affil-meta { color: #1e5692; font-weight: bold;}
+            .affil-kaust { color: #b12328; font-weight: bold;}
+            .proj-lead { font-size: 0.9em; margin-top: 5px; color: #777; }
+          </style>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://feielysia.github.io/">Junjie Fei</a><sup class="affil-meta">1</sup><sup class="affil-kaust">,2</sup><sup>&dagger;</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://junchen14.github.io/">Jun Chen</a><sup class="affil-meta">1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://zechunliu.com/">Zechun Liu</a><sup class="affil-meta">1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://pages.cs.wisc.edu/~yunyang/">Yunyang Xiong</a><sup class="affil-meta">1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://chongzhou96.github.io/">Chong Zhou</a><sup class="affil-meta">1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://wenwei202.github.io/">Wei Wen</a><sup class="affil-meta">1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://junlinhan.github.io/">Junlin Han</a><sup class="affil-meta">1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://metauto.ai/">Mingchen Zhuge</a><sup class="affil-meta">1</sup><sup class="affil-kaust">,2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.cs.umd.edu/~sakshams/">Saksham Suri</a><sup class="affil-meta">1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://qi-qian.com/">Qi Qian</a><sup class="affil-meta">1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://sming256.github.io/">Shuming Liu</a><sup class="affil-meta">1</sup><sup class="affil-kaust">,2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://sites.google.com/view/lemeng-wu/home">Lemeng Wu</a><sup class="affil-meta">1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Raghuraman_Krishnamoorthi1">Raghuraman Krishnamoorthi</a><sup class="affil-meta">1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://v-chandra.github.io/">Vikas Chandra</a><sup class="affil-meta">1</sup><sup>&dagger;</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.mohamed-elhoseiny.com/">Mohamed Elhoseiny</a><sup class="affil-kaust">2</sup><sup>&dagger;</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://sites.google.com/andrew.cmu.edu/zcckernel">Chenchen Zhu</a><sup class="affil-meta">1</sup><sup>&dagger;</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors" style="margin-top: 15px;">
+            <span class="author-block"><sup class="affil-meta">1</sup>Meta AI</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="author-block"><sup class="affil-kaust">2</sup>KAUST</span>
+          </div>
+
+          <div class="is-size-6 publication-authors proj-lead">
+            <span class="author-block"><sup>&dagger;</sup>Project Lead</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/***"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/***"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link.
+              <span class="link-block">
+                <a href="https://www.youtube.com/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/FeiElysia/Tempo"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- HuggingFace Link. -->
+              <span class="link-block">
+                <a href="https://huggingface.co/spaces/Vision-CAIR/Tempo"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon" style="font-size: 1.2em;">
+                      🤗
+                  </span>
+                  <span>Demo</span>
+                </a>
+              </span>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%" 
+             style="cursor: pointer;"
+             onclick="this.paused ? this.play() : this.pause();">
+        <source src="./static/videos/demo.mp4" type="video/mp4">
+      </video>
+      <p class="has-text-centered is-size-7" style="color: #999; margin-top: 5px;">
+        (Click video to Play/Pause)
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Adapting Multimodal Large Language Models (MLLMs) for hour-long video understanding is severely bottlenecked by context window limits. Dense visual streams quickly saturate input token budgets and exacerbate the <i>lost-in-the-middle</i> phenomenon. Existing query-agnostic heuristics—such as sparse sampling or uniform pooling—blindly sacrifice fidelity. They frequently discard transient decisive moments, blur fine-grained evidence, and waste representational bandwidth on irrelevant backgrounds.
+          </p>
+          <p>
+            To resolve this, we introduce <b>Tempo</b>, an efficient, query-aware framework that natively learns to compress long videos for downstream understanding. As its name suggests, Tempo acts as an intelligent temporal compressor that dynamically distributes the <i>rhythm</i> of the video. It leverages a Small Vision-Language Model (SVLM) to perform an early cross-modal distillation process, generating compact, intent-aligned video representations in a single forward pass.
+          </p>
+          <p>
+            To enforce strict inference budgets without breaking causality, we propose <b>Adaptive Token Allocation (ATA)</b>. Exploiting the SVLM's inherent zero-shot relevance prior and empirical semantic front-loading, ATA acts as a training-free, <i>O(1)</i> dynamic router. It allocates dense, high-fidelity bandwidth to query-critical semantic beats while rapidly fast-forwarding redundancies into minimal <i>temporal anchors</i> to maintain the global storyline.
+          </p>
+          <p>
+            Extensive experiments demonstrate that our compact 6B architecture achieves state-of-the-art performance with aggressive dynamic compression (0.5–16 tokens/frame). On the extreme-long LVBench (4101s), Tempo scores <b>52.3</b> under a strict 8K visual token budget, outperforming proprietary baselines such as GPT-4o and Gemini 1.5 Pro. Crucially, empirical profiling reveals that Tempo frequently compresses hour-long videos to token counts substantially below theoretical limits, proving that true long-form multimodal understanding is best achieved not by greedily padding expansive context windows, but through intent-driven, dynamic allocation based on semantic necessity.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/***"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+    
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    
+    <!-- Pipeline. -->
+    <div class="columns is-centered">
+      <div class="column">
+        <h2 class="title is-3">Methodology: The Tempo Framework</h2>
+        <div class="column content">
+          <img src="./static/images/tempo.svg" alt="Tempo Architecture Diagram" style="width: 100%; border-radius: 10px; margin-bottom: 20px;" />
+          <p>
+            Tempo resolves the structural mismatch between continuous visual streams and bounded LLM context windows by casting long video understanding as an end-to-end, query-aware cross-modal distillation process. Our framework consists of three core phases:
+          </p>
+          <ul>
+            <li>
+              <b>The Local Compressor (Left):</b> We uniformly partition the video into temporal segments. For each segment, a Small Vision-Language Model (SVLM) processes the visual frames alongside the user query. Under causal attention, a fixed number of learnable memory tokens inherently distill the preceding visual semantics, discarding query-irrelevant backgrounds early on.
+            </li>
+            <li>
+              <b>Inference-Only Bypass via ATA (Middle):</b> To enforce strict global token budgets (<i>e.g.,</i> 8K) during inference, we introduce <i>Adaptive Token Allocation (ATA)</i>. In a single forward pass, ATA intercepts a zero-shot relevance score directly from the SVLM. It dynamically dictates an <i>O(1)</i> head truncation—allocating dense bandwidth to query-critical segments while aggressively compressing redundancies down to as few as 4 tokens for minimal <i>temporal anchors</i>.
+            </li>
+            <li>
+              <b>The Global Decoder (Right):</b> The compressed, highly filtered memory tokens are assembled into a sparse sequence using explicit temporal tags (<i>e.g.,</i> <code>&lt;t=2.0s&gt;</code>). A large global LLM synthesizes this condensed multimodal context to generate the final, accurate response without suffering from attention dilution.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--/ Pipeline. -->
+
+    <!-- video qualitative. -->
+    <div class="column">
+      <div style="margin-top: 60px; margin-bottom: 60px; width: 100%; display: block;">
+        <h2 class="title is-3">Video Demonstrations</h2>
+
+        <div id="video-carousel" class="carousel" style="margin-top: 20px; overflow: hidden;">
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <video autoplay controls muted loop playsinline style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <source src="./static/videos/hsr_helloworld.mp4" type="video/mp4">
+            </video>
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong><br>
+                <span style="color: #333;">Task: Please analyze the provided video and answer the following 7 questions precisely.<br>Q1: How many performers are visible on the stage?<br>Q2: Describe the architectural elements in the background. What historical civilization do they remind you of?<br>Q3: What is happening in the night sky above the performers, and what does this suggest about the event?<br>Q4: List the hair colors of the performers in order from left to right.<br>Q5: Identify the specific musical instrument being played by the performer located on the far left of the stage.<br>Q6: What is the specific time interval (in seconds, e.g., XX-XXs) during which this fireworks performance scene occurs in the video?<br>Q7: Look at the audience in the foreground. How does their silhouette-like depiction affect the viewer's perspective of the stage?</span>
+              </p>
+              <div style="color: #333; margin-bottom: 0; line-height: 1.5;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <strong style="color: #da1e28;">Tempo Response:</strong>
+                  <span style="font-size: 0.75em; background-color: #e0e0e0; color: #555; padding: 2px 8px; border-radius: 12px; font-family: monospace;">⏱️ Refer to 1:27 - 1:30</span>
+                </div>
+                Q1: There are four performers visible on the stage.<br>
+                Q2: The architectural elements in the background resemble ancient Greek columns, suggesting a historical setting reminiscent of ancient Greece.<br>
+                Q3: The night sky above the performers is filled with fireworks, suggesting a celebratory event or performance.<br>
+                Q4: The hair colors of the performers from left to right are purple, pink, blonde, and blue.<br>
+                Q5: The performer on the far left is playing a harp.<br>
+                Q6: The fireworks performance scene occurs between 88.0-91.0 seconds.<br>
+                Q7: The silhouette-like depiction of the audience in the foreground creates a sense of depth and focus on the performers on stage, enhancing the viewer's perspective of the stage.
+              </div>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <video autoplay controls muted loop playsinline style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <source src="./static/videos/honkai3_becauseofyou.mp4" type="video/mp4">
+            </video>
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong><br>
+                <span style="color: #333;">Describe the video in detail.</span>
+              </p>
+              <div style="color: #333; margin-bottom: 0; line-height: 1.5;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <strong style="color: #da1e28;">Tempo Response:</strong>
+                  <span style="font-size: 0.75em; background-color: #e0e0e0; color: #555; padding: 2px 8px; border-radius: 12px; font-family: monospace;">⏱️ Global Summary</span>
+                </div>
+                The video opens with a high-tech, neon-lit cityscape at night, filled with floating structures and digital screens. A character with pink hair and a blue eye patch is seen running through the city, dodging obstacles. The environment is dark with vibrant neon colors, primarily purples, blues, and greens. The character is dressed in a futuristic outfit with a weapon. As the character moves, they are surrounded by digital elements and symbols, suggesting a cyberpunk setting. The scene shifts to a close-up of the character's face, showing determination and focus. The character is then seen in a combat stance, ready to fight. The lighting is dynamic, with flashes of light and energy. The video ends with a black screen displaying credits in white text.
+              </div>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <video autoplay controls muted loop playsinline style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <source src="./static/videos/hsr_helloworld.mp4" type="video/mp4">
+            </video>
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong><br>
+                <span style="color: #333;">Task: Please examine the provided media and answer the following three questions regarding the specific puppy in the scene:<br>Q1: What is the primary fur color of the puppy positioned on the swing?<br>Q2: Specify the exact time interval (in seconds, e.g., XX-XXs) during which the puppy is seen sitting on the swing.<br>Q3: Provide a brief description of the puppy's appearance and its surroundings.</span>
+              </p>
+              <div style="color: #333; margin-bottom: 0; line-height: 1.5;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <strong style="color: #da1e28;">Tempo Response:</strong>
+                  <span style="font-size: 0.75em; background-color: #e0e0e0; color: #555; padding: 2px 8px; border-radius: 12px; font-family: monospace;">⏱️ Refer to 2:55 - 2:57</span>
+                </div>
+                Q1: The primary fur color of the puppy is pink.<br>
+                Q2: The puppy is seen sitting on the swing from 175.0 - 180.0 seconds.<br>
+                Q3: The puppy has pink fur and is sitting on a swing in a serene setting with a tree and a body of water in the background.
+              </div>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <video autoplay controls muted loop playsinline style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <source src="./static/videos/honkai3_becauseofyou.mp4" type="video/mp4">
+            </video>
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong><br>
+                <span style="color: #333;">What text appears in the center of the video behind a sea of pink flowers?</span>
+              </p>
+              <div style="color: #333; margin-bottom: 0; line-height: 1.5;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <strong style="color: #da1e28;">Tempo Response:</strong>
+                  <span style="font-size: 0.75em; background-color: #e0e0e0; color: #555; padding: 2px 8px; border-radius: 12px; font-family: monospace;">⏱️ Refer to 8:05 - 8:07</span>
+                </div>
+                The text 'For The Thirteen Flame-Chasers' appears in pink.
+              </div>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <video autoplay controls muted loop playsinline style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <source src="./static/videos/videomme_fFjv93ACGo8.mp4" type="video/mp4">
+            </video>
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong><br>
+                <span style="color: #333;">What colors are the clothes worn by the two announcers in the studio?</span>
+              </p>
+              <div style="color: #333; margin-bottom: 0; line-height: 1.5;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <strong style="color: #da1e28;">Tempo Response:</strong>
+                  <span style="font-size: 0.75em; background-color: #e0e0e0; color: #555; padding: 2px 8px; border-radius: 12px; font-family: monospace;">⏱️ Refer to 0:03 - 0:14</span>
+                </div>
+                The man is wearing a blue suit, and the woman is wearing a red dress.
+              </div>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <video autoplay controls muted loop playsinline style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <source src="./static/videos/videomme_FjS2LzrHEO8.mp4" type="video/mp4">
+            </video>
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong><br>
+                <span style="color: #333;">What was the purpose of using a hammer to hit the car in the video?<br>A. To show the hammer works well.<br>B. To show the solidity of the car.<br>C. To warn people not to hit cars with hammers.<br>D. To illustrate that a hammer is harder than a bullet.</span>
+              </p>
+              <div style="color: #333; margin-bottom: 0; line-height: 1.5;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <strong style="color: #da1e28;">Tempo Response:</strong>
+                  <span style="font-size: 0.75em; background-color: #e0e0e0; color: #555; padding: 2px 8px; border-radius: 12px; font-family: monospace;">⏱️ Refer to 0:03 - 0:04</span>
+                </div>
+                B. To show the solidity of the car.
+              </div>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <video autoplay controls muted loop playsinline style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <source src="./static/videos/videomme_FsLaTZmP6Uw.mp4" type="video/mp4">
+            </video>
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong><br>
+                <span style="color: #333;">Which year was the game held?</span>
+              </p>
+              <div style="color: #333; margin-bottom: 0; line-height: 1.5;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <strong style="color: #da1e28;">Tempo Response:</strong>
+                  <span style="font-size: 0.75em; background-color: #e0e0e0; color: #555; padding: 2px 8px; border-radius: 12px; font-family: monospace;">⏱️ Refer to 0:14 - 0:33</span>
+                </div>
+                2016
+              </div>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <video autoplay controls muted loop playsinline style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <source src="./static/videos/videomme_Sp2nxlrQ89w.mp4" type="video/mp4">
+            </video>
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong><br>
+                <span style="color: #333;">In line with the video evidence, why does the orange stickman want to destroy the Minecraft world?<br>A. He wants to save his son.<br>B. He is too sad.<br>C. He loses his son.<br>D. He does like the world.</span>
+              </p>
+              <div style="color: #333; margin-bottom: 0; line-height: 1.5;">
+                <div style="margin-bottom: 5px;">
+                  <strong style="color: #da1e28;">Tempo Response:</strong>
+                </div>
+                C. He loses his son.
+              </div>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <video autoplay controls muted loop playsinline style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <source src="./static/videos/lvbench_gXnhqF0TqqI.mp4" type="video/mp4">
+            </video>
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong><br>
+                <span style="color: #333;">Where are the woman and children when they first appear in the video?</span>
+              </p>
+              <div style="color: #333; margin-bottom: 0; line-height: 1.5;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <strong style="color: #da1e28;">Tempo Response:</strong>
+                  <span style="font-size: 0.75em; background-color: #e0e0e0; color: #555; padding: 2px 8px; border-radius: 12px; font-family: monospace;">⏱️ Refer to 0:50 - 2:33</span>
+                </div>
+                They are on a boat, enjoying a serene river cruise.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!--/ video qualitative. -->
+
+    <!-- qualitative. -->
+    <div class="column">
+      <div style="margin-top: 60px; margin-bottom: 60px; width: 100%; display: block;">
+        <h2 class="title is-3">Qualitative Analysis: Visualizing Intent-Driven Sparsity</h2>
+        
+        <div class="content has-text-justified">
+          <p>
+            To demonstrate how Tempo dynamically allocates token bandwidth, we visualize the zero-shot relevance scores alongside the generated memory tokens. Tempo natively assigns dense anchors to query-critical moments while aggressively compressing redundant backgrounds.
+          </p>
+        </div>
+
+        <div id="qualitative-carousel" class="carousel" style="margin-top: 20px; overflow: hidden;">
+
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <img src="./static/images/qualitative1.svg" alt="Text Recognition" style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong> 
+                <span style="color: #333;">What words are written in the background for an event that involves a group of princesses or royal girls?</span>
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; font-size: 0.9em;">
+                <span style="background-color: #e6f0ff; border: 1px solid #0f62fe; color: #0f62fe; padding: 3px 8px; border-radius: 4px; font-weight: bold;">(A) The contest</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(B) The decision</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(C) The conceal</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(D) The competition</span>
+              </div>
+              <p style="margin-bottom: 8px;">
+                <strong style="color: #da1e28;">Prediction:</strong> 
+                <span style="color: #333; font-weight: bold;">(A) The contest </span> <span style="color: #198038;">✔</span>
+              </p>
+              <p style="margin-bottom: 0;">
+                <strong style="color: #333;">Tempo Analysis:</strong> 
+                Tempo acts as an efficient search engine, bypassing earlier irrelevant theatrical scenes to pinpoint the exact frames near the end containing the target text.
+              </p>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <img src="./static/images/qualitative2.svg" alt="Action Recognition" style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong> 
+                <span style="color: #333;">What are the people holding the yellow ropes trying to do at the place that has trees with blooms?</span>
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; font-size: 0.9em;">
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(A) ...lasso the dog</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(B) ...lasso the cat</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(C) ...lasso the Panda</span>
+                <span style="background-color: #e6f0ff; border: 1px solid #0f62fe; color: #0f62fe; padding: 3px 8px; border-radius: 4px; font-weight: bold;">(D) ...lasso the yak</span>
+              </div>
+              <p style="margin-bottom: 8px;">
+                <strong style="color: #da1e28;">Prediction:</strong> 
+                <span style="color: #333; font-weight: bold;">(D) They are trying to lasso the yak </span> <span style="color: #198038;">✔</span>
+              </p>
+              <p style="margin-bottom: 0;">
+                <strong style="color: #333;">Tempo Analysis:</strong> 
+                Notice the sharp token allocation spike. Tempo successfully suppresses the irrelevant background and allocates maximum bandwidth strictly to the moment the action occurs.
+              </p>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <img src="./static/images/qualitative3.svg" alt="Temporal Grounding" style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong> 
+                <span style="color: #333;">Where are the woman and children when they first appear in the video?</span>
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; font-size: 0.9em;">
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(A) The train</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(B) The lawn</span>
+                <span style="background-color: #e6f0ff; border: 1px solid #0f62fe; color: #0f62fe; padding: 3px 8px; border-radius: 4px; font-weight: bold;">(C) The boat</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(D) The bus</span>
+              </div>
+              <p style="margin-bottom: 8px;">
+                <strong style="color: #da1e28;">Prediction:</strong> 
+                <span style="color: #333; font-weight: bold;">(C) The boat </span> <span style="color: #198038;">✔</span>
+              </p>
+              <p style="margin-bottom: 0;">
+                <strong style="color: #333;">Tempo Analysis:</strong> 
+                Tempo effectively grounds the visual concept of the characters, allocating dense bandwidth to their appearances at both the beginning and the end of the video. This comprehensive filtering provides the global LLM with all necessary evidence to accurately deduce the "first" location while compressing the irrelevant middle segments.
+              </p>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <img src="./static/images/qualitative4.svg" alt="Object Counting" style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong> 
+                <span style="color: #333;">What is the maximum number of Taiyaki can the machine cook at the same time?</span>
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; font-size: 0.9em;">
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(A) 8</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(B) 3</span>
+                <span style="background-color: #e6f0ff; border: 1px solid #0f62fe; color: #0f62fe; padding: 3px 8px; border-radius: 4px; font-weight: bold;">(C) 4</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(D) 6</span>
+              </div>
+              <p style="margin-bottom: 8px;">
+                <strong style="color: #da1e28;">Prediction:</strong> 
+                <span style="color: #333; font-weight: bold;">(C) 4 </span> <span style="color: #198038;">✔</span>
+              </p>
+              <p style="margin-bottom: 0;">
+                <strong style="color: #333;">Tempo Analysis:</strong> 
+                Driven by the semantics of "machine" and "cook", Tempo strategically allocates bandwidth to relevant equipment throughout the timeline—capturing both the initial preparation machinery and the final cooking mold. This ensures the LLM receives the exact visual context required to count the capacity.
+              </p>
+            </div>
+          </div>
+
+          <div style="min-width: 100%; box-sizing: border-box; padding: 5px;">
+            <img src="./static/images/qualitative5.svg" alt="Global Video Category" style="border-radius: 8px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <div style="font-size: 0.95em; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #0f62fe; margin-top: 15px;">
+              <p style="margin-bottom: 10px;">
+                <strong style="color: #0f62fe;">Query:</strong> 
+                <span style="color: #333;">What is the category of this video?</span>
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; font-size: 0.9em;">
+                <span style="background-color: #e6f0ff; border: 1px solid #0f62fe; color: #0f62fe; padding: 3px 8px; border-radius: 4px; font-weight: bold;">(A) A vlog of all kinds of food around Korea</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(B) A vlog of travel around Korea</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(C) A vlog of all kinds of food around Seoul</span>
+                <span style="background-color: #fff; border: 1px solid #d9d9d9; color: #555; padding: 3px 8px; border-radius: 4px;">(D) A vlog of travel around Seoul</span>
+              </div>
+              <p style="margin-bottom: 8px;">
+                <strong style="color: #da1e28;">Prediction:</strong> 
+                <span style="color: #333; font-weight: bold;">(A) A vlog of all kinds of food around Korea </span> <span style="color: #198038;">✔</span>
+              </p>
+              <p style="margin-bottom: 0;">
+                <strong style="color: #333;">Tempo Analysis:</strong> 
+                For this global understanding task, the graph reveals Tempo automatically transitioning from sparse anchoring to a dense, continuous token distribution across the entire video.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!--/ qualitative. -->
+
+    <!-- Results. -->
+    <div class="columns is-centered" style="margin-top: 40px;">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Quantitative Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            Comparison with state-of-the-art MLLMs on long video benchmarks, highlighting Tempo's superior accuracy and extreme token efficiency. Notably, while we set a theoretical dynamic range of 0.5–16 tokens, empirical profiling reveals that Tempo inherently operates substantially below the maximum budget limits in practice (shown in gray rows).
+          </p>
+        </div>
+
+        <div class="table-container">
+          <table class="table is-striped is-hoverable is-fullwidth has-text-centered" style="margin-top: 20px; font-size: 0.95em;">
+            <thead>
+              <tr style="background-color: #363636;">
+                <th class="has-text-white has-text-left" style="vertical-align: middle;">Model</th>
+                <th class="has-text-white has-text-centered" style="vertical-align: middle;">Size</th>
+                <th class="has-text-white has-text-centered" style="vertical-align: middle;">Tokens / Frame</th>
+                <th class="has-text-white has-text-centered" style="vertical-align: middle;">LongVideoBench<br><span style="font-size: 0.8em; font-weight: normal;">(473s)</span></th>
+                <th class="has-text-white has-text-centered" style="vertical-align: middle;">MLVU<br><span style="font-size: 0.8em; font-weight: normal;">(651s)</span></th>
+                <th class="has-text-white has-text-centered" style="vertical-align: middle;">Video-MME (Overall)<br><span style="font-size: 0.8em; font-weight: normal;">(1010s)</span></th>
+                <th class="has-text-white has-text-centered" style="vertical-align: middle;">Video-MME (Long)<br><span style="font-size: 0.8em; font-weight: normal;">(2386s)</span></th>
+                <th class="has-text-white has-text-centered" style="vertical-align: middle;">LVBench<br><span style="font-size: 0.8em; font-weight: normal;">(4101s)</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background-color: #f5f5f5;"><td colspan="8" class="has-text-left"><i>Proprietary Models</i></td></tr>
+              <tr><td class="has-text-left">GPT-4o</td><td>-</td><td>-</td><td>66.7</td><td>64.6</td><td>71.9</td><td>65.3</td><td>30.8</td></tr>
+              <tr><td class="has-text-left">Gemini 1.5 Pro</td><td>-</td><td>-</td><td>64.0</td><td>-</td><td>75.0</td><td>67.4</td><td>33.1</td></tr>
+
+              <tr style="background-color: #f5f5f5;"><td colspan="8" class="has-text-left"><i>General Open-Source MLLMs</i></td></tr>
+              <tr><td class="has-text-left">VideoChat2-HD</td><td>7B</td><td>72</td><td>-</td><td>47.9</td><td>45.3</td><td>39.8</td><td>-</td></tr>
+              <tr><td class="has-text-left">LLaVA-OneVision</td><td>7B</td><td>196</td><td>56.4</td><td>64.7</td><td>58.2</td><td>-</td><td>-</td></tr>
+              <tr><td class="has-text-left">LLaVA-Video</td><td>7B</td><td>676</td><td>58.2</td><td>70.8</td><td>63.3</td><td>-</td><td>-</td></tr>
+              <tr><td class="has-text-left">VideoLLaMA3*</td><td>7B</td><td>&le; 91</td><td>59.8</td><td>73.0</td><td>66.2</td><td>54.9</td><td>45.3</td></tr>
+              <tr><td class="has-text-left">InternVL3.5</td><td>8B</td><td>256</td><td>62.1</td><td>70.2</td><td>66.0</td><td>-</td><td>-</td></tr>
+              <tr><td class="has-text-left">Molmo2</td><td>8B</td><td>83</td><td>67.5</td><td>-</td><td>69.9</td><td>-</td><td>52.8</td></tr>
+              <tr><td class="has-text-left">Qwen2.5-VL</td><td>7B</td><td>1924</td><td>56.0</td><td>70.2</td><td>65.1</td><td>-</td><td>45.3</td></tr>
+              <tr><td class="has-text-left">Qwen3-VL*</td><td>2B</td><td>&le; 640</td><td>-</td><td>68.3</td><td>61.9</td><td>-</td><td>47.4</td></tr>
+              <tr><td class="has-text-left">Qwen3-VL*</td><td>8B</td><td>&le; 640</td><td>-</td><td>78.1</td><td>71.4</td><td>-</td><td>58.0</td></tr>
+
+              <tr style="background-color: #f5f5f5;"><td colspan="8" class="has-text-left"><i>Specialized Long Video MLLMs</i></td></tr>
+              <tr><td class="has-text-left">LLaMA-VID</td><td>7B</td><td>2</td><td>-</td><td>33.2</td><td>25.9</td><td>-</td><td>23.9 (13B)</td></tr>
+              <tr><td class="has-text-left">LongVA</td><td>7B</td><td>144</td><td>-</td><td>56.3</td><td>52.6</td><td>46.2</td><td>-</td></tr>
+              <tr><td class="has-text-left">Kangaroo</td><td>8B</td><td>256</td><td>54.8</td><td>61.0</td><td>56.0</td><td>46.7</td><td>39.4</td></tr>
+              <tr><td class="has-text-left">LongLLaVA</td><td>A13B</td><td>144</td><td>53.5</td><td>-</td><td>53.8</td><td>46.4</td><td>-</td></tr>
+              <tr><td class="has-text-left">LongVILA</td><td>7B</td><td>196</td><td>57.1</td><td>-</td><td>60.1</td><td>47.0</td><td>-</td></tr>
+              <tr><td class="has-text-left">LongVU</td><td>7B</td><td>64</td><td>-</td><td>65.4</td><td>60.6</td><td>59.5</td><td>-</td></tr>
+              <tr><td class="has-text-left">Storm</td><td>7B</td><td>64</td><td>60.5</td><td>72.9</td><td>63.4</td><td>53.4</td><td>-</td></tr>
+              <tr><td class="has-text-left">BIMBA</td><td>7B</td><td>36</td><td>59.5</td><td>71.4</td><td>64.7</td><td>-</td><td>-</td></tr>
+              <tr><td class="has-text-left">VideoChat-Flash</td><td>7B</td><td>16</td><td><u>64.7</u></td><td>74.7</td><td>65.3</td><td>55.4</td><td>48.2</td></tr>
+
+              <tr style="background-color: #e6f0ff; border-top: 2px solid #0f62fe;">
+                <td class="has-text-left" style="color: #0f62fe;"><strong>Tempo* (4K Budget)</strong></td>
+                <td><strong>6B</strong></td>
+                <td><strong>0.5&ndash;16</strong></td>
+                <td>64.5</td> <td><strong>75.6</strong></td>
+                <td><strong>67.8</strong></td>
+                <td><strong>57.8</strong></td>
+                <td><strong>52.7</strong></td>
+              </tr>
+              <tr style="background-color: #f9f9f9; font-style: italic; color: #555; font-size: 0.9em;">
+                <td colspan="3" class="has-text-right" style="padding-right: 20px;">&#8627; actual avg. toks/frame</td>
+                <td>2.8</td><td>2.8</td><td>3.6</td><td>3.4</td><td>2.9</td>
+              </tr>
+              
+              <tr style="background-color: #e6f0ff;">
+                <td class="has-text-left" style="color: #0f62fe;"><strong>Tempo* (8K Budget)</strong></td>
+                <td><strong>6B</strong></td>
+                <td><strong>0.5&ndash;16</strong></td>
+                <td><strong>65.1</strong></td> <td><u>75.2</u></td>
+                <td><u>67.7</u></td>
+                <td><u>57.0</u></td>
+                <td><u>52.3</u></td>
+              </tr>
+              <tr style="background-color: #f9f9f9; font-style: italic; color: #555; font-size: 0.9em; border-bottom: 2px solid #0f62fe;">
+                <td colspan="3" class="has-text-right" style="padding-right: 20px;">&#8627; actual avg. toks/frame</td>
+                <td>3.1</td><td>3.3</td><td>4.3</td><td>4.1</td><td>3.5</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+    <!--/ Results. -->
+
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <p>If you find our work useful for your research and applications, please consider citing our paper:</p>
+    <pre><code>@article{fei2026tempo,
+  title     = {Small Vision-Language Models are Smart Compressors for Long Video Understanding},
+  author    = {Fei, Junjie and Chen, Jun and Liu, Zechun and Xiong, Yunyang and Zhou, Chong and Wen, Wei and Han, Junlin and Zhuge, Mingchen and Suri, Saksham and Qian, Qi and Liu, Shuming and Wu, Lemeng and Krishnamoorthi, Raghuraman and Chandra, Vikas and Elhoseiny, Mohamed and Zhu, Chenchen},
+  journal   = {arXiv preprint},
+  year      = {2026},
+}</code></pre>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop content">
+    
+    <h2 class="title is-3">Acknowledgements</h2>
+    <p>
+      Junjie Fei, Mingchen Zhuge, Shuming Liu, and Mohamed Elhoseiny were supported by funding from the King Abdullah University of Science and Technology (KAUST) Center of Excellence for Generative AI.
+    </p>
+    <p>
+      We extend our sincere gratitude to the authors of <a href="https://lvbench.github.io/" target="_blank">LVBench</a>, <a href="https://video-mme.github.io/" target="_blank">Video-MME</a>, <a href="https://github.com/JUNJIE99/MLVU" target="_blank">MLVU</a>, and <a href="https://longvideobench.github.io/" target="_blank">LongVideoBench</a> for providing the invaluable long-video evaluation benchmarks that made this research possible.
+    </p>
+    <p>
+      Our codebase is built upon the excellent foundations of <a href="https://github.com/Vision-CAIR/LongVU" target="_blank">LongVU</a>, <a href="https://github.com/OpenGVLab/VideoChat-Flash" target="_blank">VideoChat-Flash</a>, <a href="https://github.com/haotian-liu/LLaVA" target="_blank">LLaVA</a>, and <a href="https://github.com/QwenLM/Qwen3-VL" target="_blank">Qwen3-VL</a>. Furthermore, our models are initialized using the powerful pre-trained weights from <strong>Qwen3-VL</strong> and <strong>Qwen3-LM</strong>. We also thank the <a href="https://github.com/nerfies/nerfies.github.io" target="_blank">Nerfies</a> team for open-sourcing their beautiful project page template.
+    </p>
+
+  <h2 class="title is-3" style="margin-top: 40px;">License & Disclaimer</h2>
+
+  <p>
+    <strong>Framework & Weights:</strong> The <strong>Tempo</strong> framework's source code is open-sourced under the 
+    <a href="https://opensource.org/licenses/Apache-2.0" target="_blank" style="font-weight: bold; color: #198038;">Apache-2.0 License</a> 
+    to foster the research and development of community. However, the pre-trained model weights and checkpoints are distributed strictly for <strong>academic and non-commercial research purposes</strong>. Any commercial use is explicitly prohibited without prior written consent.
+  </p>
+
+  <p>
+    <strong>Video & Data Assets:</strong> All visual media, including video clips and images showcased on this project page and within our evaluation pipelines, are utilized under the doctrine of <strong>Fair Use</strong> exclusively for non-profit academic research and scientific illustration. We claim no ownership over the original, copyrighted media assets.
+  </p>
+
+  <p>
+    <strong>Take-down Notice:</strong> We deeply respect the intellectual property rights of creators. If you are a copyright holder and believe that any content hosted here infringes upon your rights, please contact us at 
+    <a href="mailto:junjiefei@outlook.com"><strong>junjiefei@outlook.com</strong></a> or open an 
+    <a href="https://github.com/FeiElysia/tempo-page/issues" target="_blank"><strong>issue</strong></a> on our GitHub repository. We will promptly investigate and remove the identified content upon verification.
+  </p>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/pdf/tempo_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/FeiElysia" class="external-link">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/FeiElysia/tempo-page">source code</a> of this website,
+            we just ask that you link back to this page in the footer. 
+            The template is borrowed from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
